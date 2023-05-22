@@ -8,6 +8,7 @@
     <meta name="keywords" content="codelean, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf_token" content="{{ csrf_token() }}" />
     <title>@yield('title') | MLA </title>
 
     <!-- Google Font -->
@@ -310,8 +311,12 @@
 <script src="front/js/main.js"></script>
 <script src="front/js/imagesloaded.pkgd.min.js"></script>
 <script src="front/js/owlcarousel2-filter.min.js"></script>
-
-
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')}
+    });
+</script>
+<script src="{{ asset('assets/main.js') }}"></script>
 </body>
 
 </html>

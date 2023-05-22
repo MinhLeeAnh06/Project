@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\CartService;
 use App\Services\Order\OrderServiceInterface;
 use App\Services\User\UserServiceInterface;
 use App\Utilities\Constant;
@@ -14,10 +15,15 @@ class AccountController extends Controller
 {
     private $userService;
     private $orderService;
-    public function __construct(UserServiceInterface $userService , OrderServiceInterface $orderService)
-    {
+    private $cartService;
+    public function __construct(
+        UserServiceInterface $userService,
+        OrderServiceInterface $orderService,
+        CartService $cartService
+    ) {
         $this->userService= $userService;
         $this->orderService= $orderService;
+        $this->cartService= $cartService;
     }
 
     public function login(){
@@ -34,6 +40,7 @@ class AccountController extends Controller
         $remember = $request->remember;
         if(Auth::attempt($credentials,$remember)){
             //return redirect('');
+            $this->cartService->mergeNewCartInOldCart();
             return redirect()->intended('');
         } else{
             return back()->with('notification' , 'ERROR : Email or Password is Wrong');

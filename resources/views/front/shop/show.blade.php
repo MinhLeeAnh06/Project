@@ -55,11 +55,12 @@
                             <div class="pd-color">
                                 <h6>Color</h6>
                                     <div class="pd-color-choose">
+                                        @php($count = 1)
                                         @foreach(array_unique(array_column($product->productDetails->toArray(),'color')) as $productColor)
                                             <div class="cc-item">
-                                                <input type="radio" id="cc-{{$productColor}}">
-                                                <label for="cc-{{$productColor}}" class="cc-{{$productColor}}"></label>
+                                                <label class="change-color color-{{ $count }}" data-color="{{$productColor}}" style="background-color: {{ $productColor }};"></label>
                                             </div>
+                                            @php($count++)
                                         @endforeach
                                     </div>
                             </div>
@@ -71,10 +72,12 @@
                               </div>
                                 @endforeach
                             </div>
+
                             <div class="quantity">
                                 <div class="quantity">
-
-                                    <a href="javascript:addCart({{$product->id}})" class="primary-btn pd-cart">Add To Cart  </a>
+                                    <button class="primary-btn pd-cart btn-add-to-cart"
+                                            data-url="{{ route('cart.store') }}"
+                                            data-product-id="{{ $product->id }}">Add To Cart</button>
                                 </div>
                             </div>
                             <ul class="pd-tags">

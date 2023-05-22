@@ -14,18 +14,16 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
+            $table->string('order_id', 50)->primary();
             $table->integer('user_id')->nullable();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->integer('amount');
+            $table->double('total');
+            $table->string('payment_type')->nullable();
             $table->string('company_name')->nullable();
-            $table->string('country');
-            $table->string('street_address');
-            $table->string('postcode_zip');
-            $table->string('town_city');
-            $table->string('email');
-            $table->string('phone');
-            $table->string('payment_type');
+            $table->string('country')->nullable();
+            $table->string('street_address')->nullable();
+            $table->string('postcode_zip')->nullable();
+            $table->string('town_city')->nullable();
             $table->integer('status');
             $table->timestamps();
         });
