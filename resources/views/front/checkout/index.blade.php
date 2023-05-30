@@ -4,17 +4,17 @@
 <!--Shopping Cart Section Begin-->
 <div class="checkout-section spad">
     <div class="container">
-        <form action="" class="checkout-form" method="post" >
+        <form action="{{ route('order.store') }}" class="checkout-form" method="post">
             @csrf
             <div class="row">
-                @if(Cart::count()>0)
+                @if(!empty($carts))
                     <div class="col-lg-6">
                         <div class="checkout-content">
                             <a href="" class="content-btn">Click Here To Login</a>
                         </div>
                         <h4>Billing Details</h4>
                         <div class="row">
-                            <input type="hidden" id="user_id" name="user_id" value="{{Auth::user()->id??''}}" required>
+                            <input type="hidden" id="user_id" name="user_id" value="{{Auth::user()->id ??''}}" required>
                             <div class="col-lg-6">
                                 <label for="fir">First Name <span>*</span> </label>
                                 <input type="text" id="fir" name="first_name" value="{{Auth::user()->name??''}}"required>
@@ -24,20 +24,12 @@
                                 <input type="text" id="last" name="last_name" value="{{Auth::user()->name??''}}"required>
                             </div>
                             <div class="col-lg-12">
-                                <label for="cun-name">Company Name <span>*</span> </label>
-                                <input type="text" id="cun-name" name="company_name"  value="{{Auth::user()->company_name??''}}"required>
-                            </div>
-                            <div class="col-lg-12">
                                 <label for="cun">Country Name <span>*</span> </label>
                                 <input type="text" id="cun" name="country" value="{{Auth::user()->country??''}}"required>
                             </div>
                             <div class="col-lg-12">
                                 <label for="street">Street Address<span>*</span> </label>
                                 <input type="text" id="street" name="street_address" class="street-first"  value="{{Auth::user()->street_address??''}}"required>
-                            </div>
-                            <div class="col-lg-12">
-                                <label for="zip">PostCode / ZIP(optinal)<span>*</span> </label>
-                                <input type="text" id="zip" name="postcode_zip"  value="{{Auth::user()->postcode_zip??''}}"required>
                             </div>
                             <div class="col-lg-12">
                                 <label for="town">Town / City<span>*</span> </label>
@@ -66,21 +58,18 @@
                                 <ul class="order-table">
                                     <li>Product <span>Total</span> </li>
                                     @foreach($carts as $cart)
-                                        <li class="fw-normal">{{$cart->name}} x {{$cart->qty}} <span>${{$cart->price * $cart->qty}}</span></li>
+                                        <li class="fw-normal">{{$cart->product->name}} x {{$cart->quantity}} <span>${{$cart->product->price * $cart->quantity}}</span></li>
                                     @endforeach
 
-
-                                    <li class="fw-normal"> Subtotal <span>${{$subtotal}}</span></li>
-                                    <li class="fw-normal">Total <span>${{$total}}</span></li>
-
+                                    <li class="fw-normal">Total <span>${{number_format($carts->sum('price'))}}</span></li>
                                 </ul>
                                 <div class="payment-check">
                                     <div class="pc-item">
-                                        <label class="pc-check">
-                                            Pay Later
-                                            <input type="radio" name="payment_type" value="pay_later" id="pc-check" checked>
-                                            <span class="checkmark"></span>
-                                        </label>
+                                        <lable>Phương thức thanh toán</lable>
+                                        <select class="border" name="payment_type">
+                                            <option value="0">Trả tiền sau</option>
+                                            <option value="1">VNPay</option>
+                                        </select>
                                     </div>
                                     <div class="pc-item">
 

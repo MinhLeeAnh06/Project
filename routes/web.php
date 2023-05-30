@@ -9,7 +9,6 @@ use App\Http\Controllers\Front\{
     AccountController
 };
 
-
 use App\Http\Controllers\Admin\{
     UserController,
     ProductCategoryController,
@@ -31,7 +30,7 @@ use App\Http\Controllers\Admin\{
 |
 */
 
-Route::get('/',[HomeController::class,'index']);
+Route::get('/',[HomeController::class,'index'])->name('home');
 Route::get('blog',[Blog::class,'index']);
 Route::get('blog/{id}',[Blog::class,'show']);
 Route::prefix('shop')->group(function (){
@@ -39,7 +38,6 @@ Route::prefix('shop')->group(function (){
     Route::get('product/{id}',[ShopController::class,'show']);
     Route::post('product/{id}',[ShopController::class,'postComment']);
     Route::get('',[ShopController::class,'index']);
-
     Route::get('category/{categoryName}',[ShopController::class,'category']);
 });
 
@@ -50,21 +48,11 @@ Route::prefix('cart')->name('cart.')->group(function (){
     Route::put('{id}/update', [CartController::class, 'actionCart'])->name('update');
 });
 
-//
-//Route::prefix('cart')->group(function (){
-//    Route::get('add',[\App\Http\Controllers\Front\CartController::class,'add']);
-//    Route::get('/',[\App\Http\Controllers\Front\CartController::class,'index']);
-//    Route::get('delete',[\App\Http\Controllers\Front\CartController::class,'delete']);
-//    Route::get('destroy',[\App\Http\Controllers\Front\CartController::class,'destroy']);
-//    Route::get('update',[\App\Http\Controllers\Front\CartController::class,'update']);
-//});
-
-Route::prefix('checkout')->group(function (){
-    Route::get('/',[CheckOutController::class , 'index']);
-    Route::post('/',[CheckOutController::class , 'addOrder']);
-    Route::get('/result',[CheckOutController::class , 'result']);
-    Route::get('/vnPayCheck',[CheckOutController::class , 'vnPayCheck']);
+Route::prefix('order')->name('order.')->group(function (){
+    Route::get('/',[\App\Http\Controllers\HomeController::class , 'showViewCheckout'])->name('index');
+    Route::post('/create',[\App\Http\Controllers\Order\OrderController::class , 'store'])->name('store');
 });
+
 Route::prefix('account')->group(function (){
     Route::get('login',[AccountController::class , 'login']);
     Route::post('login',[AccountController::class , 'checkLogin']);
@@ -85,6 +73,14 @@ Route::prefix('account')->group(function (){
 |
 */
 Route::prefix('admin')->middleware('CheckAdminLogin')->group(function (){
+
+    Route::prefix('order')->name('admin.order.')->group(function (){
+        Route::get('/',[\App\Http\Controllers\Order\OrderController::class, 'index'])->name('index');
+        Route::get('/{id}',[\App\Http\Controllers\Order\OrderController::class, 'show'])->name('show');
+        Route::put('/{status}/{orderId}',[\App\Http\Controllers\Order\OrderController::class, 'updateStatus'])->name('update.status');
+    });
+
+
     Route::redirect('','admin/user');
     Route::resource('user',UserController::class);
     Route::resource('category',ProductCategoryController::class);
@@ -92,7 +88,8 @@ Route::prefix('admin')->middleware('CheckAdminLogin')->group(function (){
     Route::resource('product/{product_id}/image',ProductImageController::class);
     Route::resource('product/{product_id}/detail',ProductDetailController::class);
     Route::resource('product',ProductController::class);
-    Route::resource('order',OrderController::class);
+//    Route::resource('order',OrderController::class);
+
     Route::resource('statistical',Statistic::class);
     Route::resource('blog',BlogDetails::class);
     Route::resource('blog/{blogDetail}/image',BlogImages::class);

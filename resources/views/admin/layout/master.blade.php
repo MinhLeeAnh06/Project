@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="csrf_token" content="{{ csrf_token() }}" />
     <title>Admin - CodeLean eShop</title>
     <meta name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
@@ -1462,7 +1463,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="./admin/order"  class="{{(request()->segment(2) =='order')?'mm-active':''}}">
+                                    <a href="{{ route('admin.order.index') }}"  class="{{(request()->segment(2) =='order')?'mm-active':''}}">
                                         <i class="metismenu-icon"></i>Order
                                     </a>
                                 </li>
@@ -2677,6 +2678,12 @@
 
 <script type="text/javascript" src="./dashboard/assets/scripts/main.js"></script>
 <script type="text/javascript" src="./dashboard/assets/scripts/my_script.js"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')}
+    });
+</script>
+<script type="text/javascript" src="{{ asset('assets/order.js') }}"></script>
 </body>
 
 </html>

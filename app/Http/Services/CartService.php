@@ -156,11 +156,11 @@ class CartService extends BaseService
     /**
      * @return \Illuminate\Database\Eloquent\Collection|void
      */
-    public function showCart()
+    public function showCart($userId = null)
     {
         try {
-            if (Auth::user()) {
-                $sessionId = $this->shoppingSessionService->checkExistShoppingSession(Auth::user()->id)->id;
+            if ($userId ?? Auth::user()) {
+                $sessionId = $this->shoppingSessionService->checkExistShoppingSession($userId ?? Auth::user()->id)->id;
             }
             $carts = $this->where('session_id', $sessionId ?? Cookie::get('session_cart'))->get();
 
@@ -247,7 +247,7 @@ class CartService extends BaseService
      * @param $sessionId
      * @return void
      */
-    private function deleteCartBySessionId($sessionId)
+    public function deleteCartBySessionId($sessionId)
     {
         $this->model->where('session_id', $sessionId)->delete();
     }

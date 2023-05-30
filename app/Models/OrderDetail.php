@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\Attributes\OrderDetailAttribute;
+use App\Traits\Relationships\OrderDetailRelationship;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderDetail extends Model
 {
-    use HasFactory;
+    use HasFactory,
+        OrderDetailRelationship,
+        OrderDetailAttribute;
 
     protected $table      = 'order_details';
     protected $primaryKey = 'id';

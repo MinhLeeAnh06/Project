@@ -1,4 +1,4 @@
-    @extends('admin.layout.master')
+@extends('admin.layout.master')
 @section('title' , 'Orders')
 @section('body')
     <!-- Main -->
@@ -51,70 +51,25 @@
                         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                             <thead>
                             <tr>
-                                <th class="text-center">ID</th>
-                                <th>Customer / Products</th>
-                                <th class="text-center">Address</th>
+                                <th class="text-center">Order ID</th>
+                                <th class="text-center">User name</th>
                                 <th class="text-center">Amount</th>
+                                <th class="text-center">Total</th>
+                                <th class="text-center">Payment type</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center">Actions</th>
+                                <th class="text-center">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($orders as $order)
-                            <tr>
-                                <td class="text-center text-muted">#{{$order->id}}</td>
-                                <td>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-3">
-                                                <div class="widget-content-left">
-                                                    <img style="height: 60px;"
-                                                         data-toggle="tooltip" title="Image"
-                                                         data-placement="bottom"
-                                                         src="front/img/products/{{$order->orderDetails[0]->product->productImages[0]->path}}" alt="">
-                                                </div>
-                                            </div>
-                                            <div class="widget-content-left flex2">
-                                                <div class="widget-heading">{{$order->first_name.''.$order->last_name}}</div>
-                                                <div class="widget-subheading opacity-7">
-                                                    {{$order->orderDetails[0]->product->name}}
-                                                    @if(count($order->orderDetails)>1)
-                                                        (and{{count($order->orderDetails)}} other products)
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    {{$order->street_address.'-'.$order->town_city}}
-                                </td>
-                                <td class="text-center">${{array_sum(array_column($order->orderDetails->toArray(),'total'))}}</td>
-                                <td class="text-center">
-                                    <div class="badge badge-dark">
-                                        {{\App\Utilities\Constant::$order_status[$order->status]}}
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <a href="./admin/order/ {{$order->id}}"
-                                       class="btn btn-hover-shine btn-outline-primary border-0 btn-sm">
-                                        Details
-                                    </a>
-                                    <a href="./admin/order/{{$order->id}}/edit" data-toggle="tooltip" title="Edit"
-                                       data-placement="bottom" class="btn btn-outline-warning border-0 btn-sm">
-                                                            <span class="btn-icon-wrapper opacity-8">
-                                                                <i class="fa fa-edit fa-w-20"></i>
-                                                            </span>
-                                    </a>
-                                </td>
-                            </tr>
-                            @endforeach
+                                @foreach($orders as $order)
+                                    @include('render.order.tbl_order')
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
 
                     <div class="d-block card-footer">
-                        {{$orders->links()}}
+{{--                        {{$orders->links()}}--}}
                     </div>
 
                 </div>
@@ -123,3 +78,52 @@
     </div>
     <!-- End Main -->
 @endsection
+
+
+{{--                            <tr>--}}
+{{--                                <td class="text-center text-muted">#{{$order->id}}</td>--}}
+{{--                                <td>--}}
+{{--                                    <div class="widget-content p-0">--}}
+{{--                                        <div class="widget-content-wrapper">--}}
+{{--                                            <div class="widget-content-left mr-3">--}}
+{{--                                                <div class="widget-content-left">--}}
+{{--                                                    <img style="height: 60px;"--}}
+{{--                                                         data-toggle="tooltip" title="Image"--}}
+{{--                                                         data-placement="bottom"--}}
+{{--                                                         src="front/img/products/{{$order->orderDetails[0]->product->productImages[0]->path}}" alt="">--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="widget-content-left flex2">--}}
+{{--                                                <div class="widget-heading">{{$order->first_name.''.$order->last_name}}</div>--}}
+{{--                                                <div class="widget-subheading opacity-7">--}}
+{{--                                                    {{$order->orderDetails[0]->product->name}}--}}
+{{--                                                    @if(count($order->orderDetails)>1)--}}
+{{--                                                        (and{{count($order->orderDetails)}} other products)--}}
+{{--                                                    @endif--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </td>--}}
+{{--                                <td class="text-center">--}}
+{{--                                    {{$order->street_address.'-'.$order->town_city}}--}}
+{{--                                </td>--}}
+{{--                                <td class="text-center">${{array_sum(array_column($order->orderDetails->toArray(),'total'))}}</td>--}}
+{{--                                <td class="text-center">--}}
+{{--                                    <div class="badge badge-dark">--}}
+{{--                                        {{\App\Utilities\Constant::$order_status[$order->status]}}--}}
+{{--                                    </div>--}}
+{{--                                </td>--}}
+{{--                                <td class="text-center">--}}
+{{--                                    <a href="./admin/order/ {{$order->id}}"--}}
+{{--                                       class="btn btn-hover-shine btn-outline-primary border-0 btn-sm">--}}
+{{--                                        Details--}}
+{{--                                    </a>--}}
+{{--                                    <a href="./admin/order/{{$order->id}}/edit" data-toggle="tooltip" title="Edit"--}}
+{{--                                       data-placement="bottom" class="btn btn-outline-warning border-0 btn-sm">--}}
+{{--                                                            <span class="btn-icon-wrapper opacity-8">--}}
+{{--                                                                <i class="fa fa-edit fa-w-20"></i>--}}
+{{--                                                            </span>--}}
+{{--                                    </a>--}}
+{{--                                </td>--}}
+{{--                            </tr>--}}
