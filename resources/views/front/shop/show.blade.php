@@ -3,6 +3,11 @@
 @section('body')
 <!--Product SHop Section Begin-->
 <section class="product-shop spad page-details">
+    <style>
+        .chose-active {
+            border: 2px solid black;
+        }
+    </style>
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
@@ -68,7 +73,7 @@
                                 @foreach(array_unique(array_column($product->productDetails->toArray(),'size')) as $productSize)
                                     <div class="sc-item">
                                   <input type="radio" id="sm-{{$productSize}}">
-                                  <label for="sm-{{$productSize}}">{{$productSize}}</label>
+                                  <label for="sm-{{$productSize}}" class="chose-size">{{$productSize}}</label>
                               </div>
                                 @endforeach
                             </div>

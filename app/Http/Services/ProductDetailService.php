@@ -34,7 +34,7 @@ class ProductDetailService extends BaseService
         DB::beginTransaction();
         try {
             $productDetail = $this->where('id', $productDetailId)->first();
-            $productDetail->update(['qty' => $status ? $productDetail->qty + $quantity : $productDetail->qty - $quantity]);
+            $productDetail->update(['qty' => $status ? $productDetail->qty - $quantity : $productDetail->qty + $quantity]);
 
             DB::commit();
             return true;

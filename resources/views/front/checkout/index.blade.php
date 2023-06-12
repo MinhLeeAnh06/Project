@@ -4,7 +4,7 @@
 <!--Shopping Cart Section Begin-->
 <div class="checkout-section spad">
     <div class="container">
-        <form action="{{ route('order.store') }}" class="checkout-form" method="post">
+        <form action="{{ route('order.store') }}" class="checkout-form" method="POST" id="form-sub-order">
             @csrf
             <div class="row">
                 @if(!empty($carts))
@@ -14,6 +14,7 @@
                         </div>
                         <h4>Billing Details</h4>
                         <div class="row">
+                            <input type="hidden" name="redirect">
                             <input type="hidden" id="user_id" name="user_id" value="{{Auth::user()->id ??''}}" required>
                             <div class="col-lg-6">
                                 <label for="fir">First Name <span>*</span> </label>
@@ -61,14 +62,15 @@
                                         <li class="fw-normal">{{$cart->product->name}} x {{$cart->quantity}} <span>${{$cart->product->price * $cart->quantity}}</span></li>
                                     @endforeach
 
-                                    <li class="fw-normal">Total <span>${{number_format($carts->sum('price'))}}</span></li>
+                                    <li class="fw-normal">Total<span>${{number_format($carts->sum('price'))}}</span></li>
                                 </ul>
                                 <div class="payment-check">
                                     <div class="pc-item">
                                         <lable>Phương thức thanh toán</lable>
-                                        <select class="border" name="payment_type">
-                                            <option value="0">Trả tiền sau</option>
-                                            <option value="1">VNPay</option>
+                                        <input type="hidden" name="total" value="{{$carts->sum('price')}}">
+                                        <select class="border" name="payment_type" id="payment_type">
+                                            <option value="0" data-url="{{ route('order.store') }}">Trả tiền sau</option>
+                                            <option value="1" data-url="{{ route('payment.vnpay.index') }}">VNPay</option>
                                         </select>
                                     </div>
                                     <div class="pc-item">
@@ -76,7 +78,7 @@
                                     </div>
                                 </div>
                                 <div class="order-btn">
-                                    <button type="submit" class="site-btn place-order">Place Order</button>
+                                    <button type="submit" class="site-btn btn-sub-order">Place Order</button>
                                 </div>
                             </div>
                         </div>

@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\CartService;
-use App\Services\Order\OrderServiceInterface;
+use App\Http\Services\OrderService;
+//use App\Services\Order\OrderServiceInterface;
 use App\Services\User\UserServiceInterface;
 use App\Utilities\Constant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AccountController extends Controller
 {
@@ -18,12 +18,14 @@ class AccountController extends Controller
     private $cartService;
     public function __construct(
         UserServiceInterface $userService,
-        OrderServiceInterface $orderService,
-        CartService $cartService
+//        OrderServiceInterface $orderService,
+        CartService $cartService,
+        OrderService $orderService
     ) {
         $this->userService= $userService;
-        $this->orderService= $orderService;
+//        $this->orderService= $orderService;
         $this->cartService= $cartService;
+        $this->orderService= $orderService;
     }
 
     public function login(){
@@ -72,12 +74,17 @@ class AccountController extends Controller
     }
     public function myOrderIndex()
     {
-        $orders = $this->orderService->getOrderByUserId(Auth::id());;
+        $orders = $this->orderService->getOrderByUserId(Auth::id());
         return view('front.account.my-order.index',compact('orders'));
     }
-    public function myOrderShow($id)
+    public function myOrderShow($orderId)
     {
-        $order = $this->orderService->find($id);
-        return view('front.account.my-order.show',compact('order'));
+        $orderDetails = $this->orderService->showOrderById($orderId);
+        return view('front.account.my-order.show',compact('orderDetails'));
+    }
+
+    public function cancelOrder(Request $request)
+    {
+//        $orderDetails = $this->orderService->showOrderById($orderId);
     }
 }

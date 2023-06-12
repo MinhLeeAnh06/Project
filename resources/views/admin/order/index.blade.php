@@ -41,8 +41,9 @@
 
                         <div class="btn-actions-pane-right">
                             <div role="group" class="btn-group-sm btn-group">
-                                <button class="btn btn-focus">This week</button>
-                                <button class="active btn btn-focus">Anytime</button>
+                                <a href="{{ LINK_CHECK_PAY }}">
+                                    <button class="btn btn-focus">link check pay</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -78,52 +79,3 @@
     </div>
     <!-- End Main -->
 @endsection
-
-
-{{--                            <tr>--}}
-{{--                                <td class="text-center text-muted">#{{$order->id}}</td>--}}
-{{--                                <td>--}}
-{{--                                    <div class="widget-content p-0">--}}
-{{--                                        <div class="widget-content-wrapper">--}}
-{{--                                            <div class="widget-content-left mr-3">--}}
-{{--                                                <div class="widget-content-left">--}}
-{{--                                                    <img style="height: 60px;"--}}
-{{--                                                         data-toggle="tooltip" title="Image"--}}
-{{--                                                         data-placement="bottom"--}}
-{{--                                                         src="front/img/products/{{$order->orderDetails[0]->product->productImages[0]->path}}" alt="">--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="widget-content-left flex2">--}}
-{{--                                                <div class="widget-heading">{{$order->first_name.''.$order->last_name}}</div>--}}
-{{--                                                <div class="widget-subheading opacity-7">--}}
-{{--                                                    {{$order->orderDetails[0]->product->name}}--}}
-{{--                                                    @if(count($order->orderDetails)>1)--}}
-{{--                                                        (and{{count($order->orderDetails)}} other products)--}}
-{{--                                                    @endif--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </td>--}}
-{{--                                <td class="text-center">--}}
-{{--                                    {{$order->street_address.'-'.$order->town_city}}--}}
-{{--                                </td>--}}
-{{--                                <td class="text-center">${{array_sum(array_column($order->orderDetails->toArray(),'total'))}}</td>--}}
-{{--                                <td class="text-center">--}}
-{{--                                    <div class="badge badge-dark">--}}
-{{--                                        {{\App\Utilities\Constant::$order_status[$order->status]}}--}}
-{{--                                    </div>--}}
-{{--                                </td>--}}
-{{--                                <td class="text-center">--}}
-{{--                                    <a href="./admin/order/ {{$order->id}}"--}}
-{{--                                       class="btn btn-hover-shine btn-outline-primary border-0 btn-sm">--}}
-{{--                                        Details--}}
-{{--                                    </a>--}}
-{{--                                    <a href="./admin/order/{{$order->id}}/edit" data-toggle="tooltip" title="Edit"--}}
-{{--                                       data-placement="bottom" class="btn btn-outline-warning border-0 btn-sm">--}}
-{{--                                                            <span class="btn-icon-wrapper opacity-8">--}}
-{{--                                                                <i class="fa fa-edit fa-w-20"></i>--}}
-{{--                                                            </span>--}}
-{{--                                    </a>--}}
-{{--                                </td>--}}
-{{--                            </tr>--}}

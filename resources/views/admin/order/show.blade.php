@@ -49,7 +49,7 @@
                                     <td class="text-center">{{ $item->product_size }}</td>
                                     <td class="text-center">{{ $item->product_base_price  }}</td>
                                     <td class="text-center">{{ $item->quantity }}</td>
-                                    <td class="text-center">{{ $item->price }}</td>
+                                    <td class="text-center">{{ number_format($item->price).' VND' }}</td>
                                 </tr>
                                 @endforeach
                                 </tbody>

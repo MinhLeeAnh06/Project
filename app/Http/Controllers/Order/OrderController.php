@@ -23,7 +23,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = $this->orderService->all();
+        $orders = $this->orderService->orderBy('created_at', 'DESC')->get();
         return view('admin.order.index', compact('orders'));
     }
 
@@ -33,13 +33,14 @@ class OrderController extends Controller
         return view('admin.order.show', compact('orderDetails'));
     }
 
-    public function updateStatus($status, $orderId)
+    public function updateStatus(Request $request)
     {
-        $result = $this->orderService->updateStatus($status, $orderId);
+        $result = $this->orderService->updateStatus($request->all());
 
         return response()->json([
-            'status' => $result,
-            'update' => $status ? true : false
+            'result' => $result,
+            'status' => $request->status,
+            'text' => getStatusOrder($request->status),
         ]);
     }
 

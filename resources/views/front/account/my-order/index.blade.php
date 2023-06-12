@@ -11,34 +11,18 @@
                         <table>
                             <thead>
                             <tr>
-                                <th>Image</th>
-                                <th>ID</th>
-                                <th class="p-name">Products Name</th>
-                                <th>Total</th>
-                                <th>Details</th>
+                                <th class="text-center">Order ID</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Total</th>
+                                <th class="text-center">Payment type</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Time create</th>
+                                <th class="text-center">Action</th>
                             </tr>
                             </thead>
                             <tbody>
                                 @foreach($orders as $order)
-                                        <td class="cart-pic first-row">
-                                            <img  style="height: 100px;" src="front/img/products/{{$order->orderDetails[0]->product->productImages[0]->path }}">
-                                        </td>
-                                            <td class="first-row">#{{$order->id}}</td>
-                                        <td class="cart-title first-row">
-                                            <h5>
-                                                {{$order->orderDetails[0]->product->name}}
-                                                @if(count($order->orderDetails)>1)
-                                                    (and {{count($order->orderDetails) }}  other products )
-                                                @endif
-                                            </h5>
-                                        </td>
-                                        <td class="total-price first-row">
-                                            ${{array_sum(array_column($order->orderDetails->toArray(),'total'))}}
-                                        </td>
-                                        <td class="close-td first-row">
-                                            <a class="btn" href="./account/my-order/{{$order->id}}">Details</a>
-                                        </td>
-                                    </tr>
+                                    @include('render.front.order.tbl_order')
                                 @endforeach
                             </tbody>
                         </table>

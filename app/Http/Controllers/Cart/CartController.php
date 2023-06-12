@@ -21,8 +21,7 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $dataRequest = $this->fakeData(1);
-        $this->cartService->addCart($dataRequest);
+        $this->cartService->addCart($request->all());
     }
 
     /**
@@ -62,22 +61,5 @@ class CartController extends Controller
             'view_cart' => $result['view_cart'],
             'view_total' => $result['view_total'],
         ]);
-    }
-
-    private function fakeData($index) {
-        $data = [
-            [
-                'productId' => 8,
-                'color' => 'red',
-                'size' => 'L'
-            ],
-            [
-                'productId' => 15,
-                'color' => 'red',
-                'size' => 'M'
-            ],
-        ];
-
-        return $data[$index];
     }
 }

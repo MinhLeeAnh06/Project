@@ -54,14 +54,15 @@ Route::prefix('order')->name('order.')->group(function (){
 });
 
 Route::prefix('account')->group(function (){
-    Route::get('login',[AccountController::class , 'login']);
+    Route::get('login',[AccountController::class , 'login'])->name('page_login');
     Route::post('login',[AccountController::class , 'checkLogin']);
     Route::get('logout',[AccountController::class , 'logout']);
     Route::get('register',[AccountController::class , 'register']);
     Route::post('register',[AccountController::class , 'postRegister']);
     Route::prefix('my-order')->middleware('CheckMemberLogin')->group(function (){
         Route::get('/',[AccountController::class, 'myOrderIndex']);
-        Route::get('{id}',[AccountController::class, 'myOrderShow']);
+        Route::get('{orderId}',[AccountController::class, 'myOrderShow'])->name('user.show.order');
+        Route::put('/cancel-order/',[AccountController::class, 'cancelOrder'])->name('user.cancel.order');
     });
 });
 
@@ -77,9 +78,8 @@ Route::prefix('admin')->middleware('CheckAdminLogin')->group(function (){
     Route::prefix('order')->name('admin.order.')->group(function (){
         Route::get('/',[\App\Http\Controllers\Order\OrderController::class, 'index'])->name('index');
         Route::get('/{id}',[\App\Http\Controllers\Order\OrderController::class, 'show'])->name('show');
-        Route::put('/{status}/{orderId}',[\App\Http\Controllers\Order\OrderController::class, 'updateStatus'])->name('update.status');
+        Route::put('/',[\App\Http\Controllers\Order\OrderController::class, 'updateStatus'])->name('update.status');
     });
-
 
     Route::redirect('','admin/user');
     Route::resource('user',UserController::class);
@@ -100,4 +100,13 @@ Route::prefix('admin')->middleware('CheckAdminLogin')->group(function (){
         });
     Route::get('logout',[\App\Http\Controllers\Admin\HomeController::class, 'logout']);
 });
+
+Route::prefix('payment')->middleware('checklogin')->name('payment.')->group(function () {
+   Route::prefix('vnpay')->name('vnpay.')->group(function () {
+       Route::post('index', [\App\Http\Controllers\Payment\PaymentController::class, 'index'])->name('index');
+       Route::post('vnpay_create_payment', [\App\Http\Controllers\Payment\PaymentController::class, 'vnpayPayment'])->name('vnpay_create');
+       Route::get('vnpay_return', [\App\Http\Controllers\Payment\PaymentController::class, 'vnpayReturn'])->name('vnpay_return');
+   });
+});
+
 

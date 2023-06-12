@@ -1,5 +1,21 @@
 $(function () {
-    $(".pd-color-choose").find('.change-color:first').css('border', 'black solid 2px');
+    $(".pd-color-choose").find('.change-color:first').addClass('chose-active');
+    $(".pd-size-choose").find('.sc-item:first label').addClass('active');
+    $(document).on('click', ".pd-color-choose .cc-item", function () {
+        console.log(1);
+        $(this).parent().find('.chose-active').removeClass('chose-active');
+        $(this).find('.change-color').addClass('chose-active');
+    })
+
+    $('#payment_type').change(function(){
+        if ($(this).val() == 1) {
+            $('.btn-sub-order').text('VnPay');
+            $('#form-sub-order').attr('action', $(this).find('option[value=1]').data('url'));
+        } else {
+            $('.btn-sub-order').text('Place Order');
+            $('#form-sub-order').attr('action', $(this).find('option[value=0]').data('url'));
+        }
+    });
 
     /**
      * Quantity change
@@ -32,8 +48,8 @@ $(function () {
     $(document).on('click', '.btn-add-to-cart', function () {
         const url = $(this).data('url');
         const productId = $(this).data('product-id');
-        const color= null;
-        const size= null;
+        const color= $('.change-color.chose-active').data('color');
+        const size= $('.chose-size.active').text();
 
         $.ajax({
             url: url,

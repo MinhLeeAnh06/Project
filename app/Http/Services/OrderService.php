@@ -15,24 +15,27 @@ class OrderService extends BaseService
     protected $orderDetailService;
     protected $shoppingSessionService;
     protected $productDetailService;
+    protected $productService;
 
     public function __construct(
         Order $model,
         CartService $cartService,
         OrderDetailService $orderDetailService,
         ShoppingSessionService $shoppingSessionService,
-        ProductDetailService $productDetailService
+        ProductDetailService $productDetailService,
+        ProductService $productService
     ) {
         $this->model                  = $model;
         $this->cartService            = $cartService;
         $this->orderDetailService     = $orderDetailService;
         $this->shoppingSessionService = $shoppingSessionService;
-        $this->productDetailService = $productDetailService;
+        $this->productDetailService   = $productDetailService;
+        $this->productService   = $productService;
     }
 
-    public function createOrder($request)
+    public function createOrder($request, $orderId = null)
     {
-        $orderId = $this->randomOrderId();
+        if ($orderId == null) $orderId = $this->randomOrderId();
         $carts = $this->cartService->showCart($request->user_id);
         $sessionId = $carts->first()->session_id;
 
@@ -40,10 +43,10 @@ class OrderService extends BaseService
             'order_id'       => $orderId,
             'user_id'        => $request->user_id,
             'amount'         => $carts->count(),
-            'total'          => $carts->sum('price'),
+            'total'          => $carts->sum('price') * USD_EXCHANGE_RATE,
             'country'        => $request->country,
             'town_city'      => $request->town_city,
-            'status'         => $request->payment_type ? 1 : 0,
+            'status'         => 0,
             'payment_type'   => $request->payment_type,
             'street_address' => $request->street_address
         ];
@@ -55,6 +58,7 @@ class OrderService extends BaseService
             $cartsArray = $carts->toArray();
             foreach ($cartsArray as $key => $cart) {
                 $cartsArray[$key]['order_id'] = $order->order_id;
+                $cartsArray[$key]['price'] = $cart['price'] * USD_EXCHANGE_RATE;
                 $cartsArray[$key]['created_at'] = now()->toDateTimeString();
                 $cartsArray[$key]['updated_at'] = now()->toDateTimeString();
                 unset($cartsArray[$key]['id'], $cartsArray[$key]['session_id']);
@@ -75,7 +79,7 @@ class OrderService extends BaseService
         return $status;
     }
 
-    private function randomOrderId()
+    public function randomOrderId()
     {
         $nowDate = Carbon::now();
         $str = str_replace('-', '', $nowDate->toDateTimeString());
@@ -86,25 +90,41 @@ class OrderService extends BaseService
         return $order_id;
 	}
 
+    public function getOrderByUserId($userId)
+    {
+        return $this->where('user_id', $userId)->get();
+    }
+
     public function showOrderById($orderId)
     {
        return $this->orderDetailService->getOrderDetailByOrderId($orderId);
     }
 
-    public function updateStatus($status, $orderId)
+    public function updateStatus($request)
     {
+        $orderId = $request['orderId'];
+        $status = $request['status'];
+
         DB::beginTransaction();
         try {
             $order = $this->where('order_id', $orderId)->first();
-            $order->update(['status' => $status ? $this->model::NO_APPROVAL : $this->model::APPROVAL]);
+            $order->update(['status' => $status]);
 
-            $orderDetail = $this->showOrderById($orderId)->pluck('quantity', 'product_detail_id')->toArray();
+            $order = $this->showOrderById($orderId);
+            $orderDetail = $order->pluck('quantity', 'product_detail_id')->toArray();
+            $product = $order->pluck('quantity', 'product_id')->toArray();
 
-            foreach ($orderDetail as $key => $value)
-            {
-                $this->productDetailService->deleteQuantityById($key, $value, $status);
+            if ($status == 1 || $status == 0) {
+                foreach ($orderDetail as $productDetailId => $quantity)
+                {
+                    $this->productDetailService->deleteQuantityById($productDetailId, $quantity, $status);
+                }
+
+                foreach ($product as $producId => $quantity)
+                {
+                    $this->productService->deleteQuantityById($producId, $quantity, $status);
+                }
             }
-
 
             DB::commit();
             return true;

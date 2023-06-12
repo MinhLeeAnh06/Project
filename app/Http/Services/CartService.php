@@ -182,7 +182,10 @@ class CartService extends BaseService
             $cartItem->delete();
             $this->shoppingSessionService->updateAmountShoppingSession($cartItem->session_id);
             $carts = $this->showCart();
-            if (!$carts->count()) $this->shoppingSessionService->deleteShoppingSessionByAmount();
+            if (!$carts->count()) {
+                $this->shoppingSessionService->deleteShoppingSessionByAmount();
+                if (!Auth::user()) Cookie::queue(Cookie::forget('session_cart'));
+            }
             $view_cart = view('render.cart.tbl_cart', compact('carts'))->render();
             $view_total = view('render.cart.total_cart', compact('carts'))->render();
 
