@@ -16,6 +16,7 @@ class OrderService extends BaseService
     protected $shoppingSessionService;
     protected $productDetailService;
     protected $productService;
+    protected $paymentService;
 
     public function __construct(
         Order $model,
@@ -23,14 +24,16 @@ class OrderService extends BaseService
         OrderDetailService $orderDetailService,
         ShoppingSessionService $shoppingSessionService,
         ProductDetailService $productDetailService,
-        ProductService $productService
+        ProductService $productService,
+        PaymentService $paymentService
     ) {
         $this->model                  = $model;
         $this->cartService            = $cartService;
         $this->orderDetailService     = $orderDetailService;
         $this->shoppingSessionService = $shoppingSessionService;
         $this->productDetailService   = $productDetailService;
-        $this->productService   = $productService;
+        $this->productService         = $productService;
+        $this->paymentService         = $paymentService;
     }
 
     public function createOrder($request, $orderId = null)
@@ -108,21 +111,27 @@ class OrderService extends BaseService
         DB::beginTransaction();
         try {
             $order = $this->where('order_id', $orderId)->first();
-            $order->update(['status' => $status]);
-
-            $order = $this->showOrderById($orderId);
-            $orderDetail = $order->pluck('quantity', 'product_detail_id')->toArray();
-            $product = $order->pluck('quantity', 'product_id')->toArray();
-
-            if ($status == 1 || $status == 0) {
-                foreach ($orderDetail as $productDetailId => $quantity)
-                {
-                    $this->productDetailService->deleteQuantityById($productDetailId, $quantity, $status);
+            if ($status == $this->model::STATUS_ORDER_CANCEL) {
+                if ($order->status != $this->model::STATUS_DELIVERING && $order->status != $this->model::STATUS_DELIVERY_SUCCESSFUL) {
+                    $order->update(['status' => $status]);
                 }
+            } else {
+                $order->update(['status' => $status]);
 
-                foreach ($product as $producId => $quantity)
-                {
-                    $this->productService->deleteQuantityById($producId, $quantity, $status);
+                $order = $this->showOrderById($orderId);
+                $orderDetail = $order->pluck('quantity', 'product_detail_id')->toArray();
+                $product = $order->pluck('quantity', 'product_id')->toArray();
+
+                if ($status == 1 || $status == 0) {
+                    foreach ($orderDetail as $productDetailId => $quantity)
+                    {
+                        $this->productDetailService->deleteQuantityById($productDetailId, $quantity, $status);
+                    }
+
+                    foreach ($product as $producId => $quantity)
+                    {
+                        $this->productService->deleteQuantityById($producId, $quantity, $status);
+                    }
                 }
             }
 

@@ -131,4 +131,32 @@ $(function () {
             }
         });
     }
+
+    $(document).on('click', '.btn-cancel-order', function () {
+        const url = $(this).data('url');
+        const elm_tr = $(this).parents('tr');
+
+
+        if (confirm('Bạn có chắc muốn hủy đơn hàng này không ?')) {
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                beforeSend: function () {
+
+                },
+                success: (data) => {
+                    if (data.status) {
+                        elm_tr.css('background-color', '#afabab');
+                        $(this).attr('disabled', 'disabled');
+                    }
+                },
+                error: function () {
+
+                },
+                complete: function () {
+
+                }
+            });
+        }
+    });
 })

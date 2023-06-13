@@ -23,7 +23,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = $this->orderService->orderBy('created_at', 'DESC')->get();
+        $orders = $this->orderService->where('status', 4, '!=')->orderBy('created_at', 'DESC')->get();
         return view('admin.order.index', compact('orders'));
     }
 
@@ -42,6 +42,12 @@ class OrderController extends Controller
             'status' => $request->status,
             'text' => getStatusOrder($request->status),
         ]);
+    }
+
+    public function indexOrderCancel()
+    {
+        $orders = $this->orderService->where('status', 4)->orderBy('updated_at', 'DESC')->get();
+        return view('admin.order.order-cancel', compact('orders'));
     }
 
     public function destroy()

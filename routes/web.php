@@ -77,6 +77,7 @@ Route::prefix('admin')->middleware('CheckAdminLogin')->group(function (){
 
     Route::prefix('order')->name('admin.order.')->group(function (){
         Route::get('/',[\App\Http\Controllers\Order\OrderController::class, 'index'])->name('index');
+        Route::get('/order-cancel',[\App\Http\Controllers\Order\OrderController::class, 'indexOrderCancel'])->name('order-cancel.index');
         Route::get('/{id}',[\App\Http\Controllers\Order\OrderController::class, 'show'])->name('show');
         Route::put('/',[\App\Http\Controllers\Order\OrderController::class, 'updateStatus'])->name('update.status');
     });

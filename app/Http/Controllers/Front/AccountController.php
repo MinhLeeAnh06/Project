@@ -85,6 +85,10 @@ class AccountController extends Controller
 
     public function cancelOrder(Request $request)
     {
-//        $orderDetails = $this->orderService->showOrderById($orderId);
+        $resoult = $this->orderService->updateStatus($request);
+
+        return response()->json([
+            'status' => $resoult
+        ]);
     }
 }

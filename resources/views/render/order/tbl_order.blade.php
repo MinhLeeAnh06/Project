@@ -6,10 +6,10 @@
     @if($order->payment_type)
         <td class="text-left">
             <ul>
-                <li>Ngân hàng</li>     <!-- BankCode -->
-                <li>Mã thanh toán</li> <!-- TransactionNo -->
-                <li>Tổng tiền</li>     <!-- Amount -->
-                <li>Thời gian</li>      <!-- created_at -->
+                <li>Ngân hàng: {{ $order->payment->vnp_BankCode }}</li>
+                <li>Mã thanh toán: {{ $order->payment->vnp_TransactionNo }}</li>
+                <li>Tổng tiền: {{ number_format($order->payment->vnp_Amount). ' VND' }}</li>
+                <li>Thời gian: {{ $order->payment->created_at }}</li>
             </ul>
         </td>
     @else

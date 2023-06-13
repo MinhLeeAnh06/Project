@@ -41,13 +41,8 @@
 
                         <div class="btn-actions-pane-right">
                             <div role="group" class="btn-group-sm btn-group">
-                                <a href="{{ route('admin.order.order-cancel.index') }}">
-                                    <button class="btn btn-focus">Order cancel</button>
-                                </a>
-                            </div>
-                            <div role="group" class="btn-group-sm btn-group">
                                 <a href="{{ LINK_CHECK_PAY }}">
-                                    <button class="btn btn-focus">link check pay</button>
+                                    <button class="btn btn-focus">Link check pay</button>
                                 </a>
                             </div>
                         </div>
@@ -61,21 +56,31 @@
                                 <th class="text-center">User name</th>
                                 <th class="text-center">Amount</th>
                                 <th class="text-center">Total</th>
-                                <th class="text-center">Payment type</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach($orders as $order)
-                                    @include('render.order.tbl_order')
-                                @endforeach
+                            @foreach($orders as $order)
+                                <tr data-order-id="{{ $order->order_id }}">
+                                    <td class="text-center">{{ $order->order_id }}</td>
+                                    <td class="text-center">{{ $order->user_name }}</td>
+                                    <td class="text-center">{{ $order->amount }}</td>
+                                    <td class="text-center">{{ number_format($order->total). ' VND' }}</td>
+                                    <td class="text-center text-status">{{ getStatusOrder($order->status) }}</td>
+                                    <td class="text-center">
+                                        <div class="mt-2">
+                                            <a href="{{ route('admin.order.show', ['id' => $order->order_id]) }}" class="btn btn-warning">Xem đơn hàng</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
 
                     <div class="d-block card-footer">
-{{--                        {{$orders->links()}}--}}
+                        {{--                        {{$orders->links()}}--}}
                     </div>
 
                 </div>

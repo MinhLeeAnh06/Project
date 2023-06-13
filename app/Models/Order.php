@@ -32,15 +32,10 @@ class Order extends Model
         'status'
     ];
 
-    const PAY_AFTER_RECIEVE = "Thanh toán sau khi nhận hàng";
-    const ONLINE_PAYMENT = "Thanh toán online";
-
-    const APPROVAL = 1;
-    const NO_APPROVAL = 0;
-
     const STATUS_WAITING_FOR_APPROVAL = 0; // Chờ xét duyệt
     const STATUS_APPROVED = 1; // Đã xét duyệt
     const STATUS_DELIVERING = 2; // Đang giao hàng
     const STATUS_DELIVERY_SUCCESSFUL = 3; // Giao hàng thành công
+    const STATUS_ORDER_CANCEL = 4; // Đơn hàng bị hủy
 
 }

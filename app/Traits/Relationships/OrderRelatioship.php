@@ -5,6 +5,7 @@ namespace App\Traits\Relationships;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 trait OrderRelatioship
 {
@@ -14,5 +15,13 @@ trait OrderRelatioship
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function payment():HasOne
+    {
+        return $this->hasOne(Payment::class, 'vnp_TxnRef', 'order_id');
     }
 }

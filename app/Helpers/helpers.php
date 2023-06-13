@@ -16,6 +16,9 @@ if (! function_exists('getStatusOrder')) {
             case Order::STATUS_DELIVERY_SUCCESSFUL:
                 $result = "Giao hàng thành công";
                 break;
+            case Order::STATUS_ORDER_CANCEL:
+                $result = "Đơn hàng đã hủy";
+                break;
             default:
                 $result = "Chờ xét duyệt";
                 break;

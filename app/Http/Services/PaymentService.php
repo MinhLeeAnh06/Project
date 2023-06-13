@@ -11,4 +11,10 @@ class PaymentService extends BaseService
     {
         $this->model = $model;
     }
+
+    public function getInfoPaymentByTxnRef($vnp_TxnRef) {
+        return $this->where('vnp_TxnRef', $vnp_TxnRef)
+            ->select('vnp_BankCode', 'vnp_TransactionNo', 'vnp_Amount', 'created_at')
+            ->get();
+    }
 }
