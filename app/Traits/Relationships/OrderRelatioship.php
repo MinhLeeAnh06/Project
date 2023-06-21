@@ -2,9 +2,11 @@
 
 namespace App\Traits\Relationships;
 
+use App\Models\OrderDetail;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 trait OrderRelatioship
@@ -23,5 +25,13 @@ trait OrderRelatioship
     public function payment():HasOne
     {
         return $this->hasOne(Payment::class, 'vnp_TxnRef', 'order_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function orderDetail(): HasMany
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id', 'order_id');
     }
 }

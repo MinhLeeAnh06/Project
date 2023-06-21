@@ -82,6 +82,17 @@ Route::prefix('admin')->middleware('CheckAdminLogin')->group(function (){
         Route::put('/',[\App\Http\Controllers\Order\OrderController::class, 'updateStatus'])->name('update.status');
     });
 
+    Route::prefix('chart')->name('admin.chart.')->group(function (){
+        Route::get('/sales-statistics', [\App\Http\Controllers\Admin\HighChartController::class, 'getDataSalesStatistics'])->name('sales_statistics');
+        Route::get('/order-statistics', [\App\Http\Controllers\Admin\HighChartController::class, 'getOrderSalesStatistics'])->name('order_statistics');
+//        Route::get('/sales-statistics',function () {
+//            return view('chart.chart_sales_statistics');
+//        })->name('sales_statistics');
+//        Route::get('/order-statistics',function () {
+//            return view('chart.chart_order_statistics');
+//        })->name('order_statistics');
+    });
+
     Route::redirect('','admin/user');
     Route::resource('user',UserController::class);
     Route::resource('category',ProductCategoryController::class);
@@ -110,4 +121,4 @@ Route::prefix('payment')->middleware('checklogin')->name('payment.')->group(func
    });
 });
 
-
+Route::get('test', [\App\Http\Controllers\Admin\HighChartController::class, 'test']);

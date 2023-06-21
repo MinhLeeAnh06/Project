@@ -21,6 +21,7 @@
 
     <link href="./dashboard/main.css" rel="stylesheet">
     <link href="./dashboard/my_style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
 </head>
 
 <body>
@@ -1495,6 +1496,25 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="mm-active">
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-plugin"></i>Chart
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="{{ route('admin.chart.order_statistics') }}">
+                                        <i class="metismenu-icon"></i>Order statistics
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ route('admin.chart.sales_statistics') }}">
+                                        <i class="metismenu-icon"></i>Sales statistics
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -2678,12 +2698,23 @@
 
 <script type="text/javascript" src="./dashboard/assets/scripts/main.js"></script>
 <script type="text/javascript" src="./dashboard/assets/scripts/my_script.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')}
     });
 </script>
 <script type="text/javascript" src="{{ asset('assets/order.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
+@yield('chart-js')
 </body>
 
 </html>

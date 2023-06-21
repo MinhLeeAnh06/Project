@@ -113,11 +113,10 @@ class OrderService extends BaseService
             $order = $this->where('order_id', $orderId)->first();
             if ($status == $this->model::STATUS_ORDER_CANCEL) {
                 if ($order->status != $this->model::STATUS_DELIVERING && $order->status != $this->model::STATUS_DELIVERY_SUCCESSFUL) {
-                    $order->update(['status' => $status]);
+                    $order->update(['status' => $status, 'calculator' => 0]);
                 }
             } else {
-                $order->update(['status' => $status]);
-
+                $order->update(['status' => $status, 'calculator' => 0]);
                 $order = $this->showOrderById($orderId);
                 $orderDetail = $order->pluck('quantity', 'product_detail_id')->toArray();
                 $product = $order->pluck('quantity', 'product_id')->toArray();
@@ -142,5 +141,19 @@ class OrderService extends BaseService
             Log::error("Error: {$e->getMessage()} --line: {$e->getLine()}");
             return false;
         }
+    }
+
+
+
+    public function getCountOrderByStatusTimeMonth($status, $arrTime)
+    {
+        $results = $this->model->where('status', $status)
+            ->select(DB::raw('MONTH(updated_at) as time'), DB::raw('COUNT(*) AS count'))
+            ->whereBetween('updated_at', $arrTime)
+            ->groupBy('time')
+            ->orderBy('time', 'ASC')
+            ->get();
+
+        return $results;
     }
 }

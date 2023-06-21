@@ -2,7 +2,6 @@ $(function () {
     $(".pd-color-choose").find('.change-color:first').addClass('chose-active');
     $(".pd-size-choose").find('.sc-item:first label').addClass('active');
     $(document).on('click', ".pd-color-choose .cc-item", function () {
-        console.log(1);
         $(this).parent().find('.chose-active').removeClass('chose-active');
         $(this).find('.change-color').addClass('chose-active');
     })
